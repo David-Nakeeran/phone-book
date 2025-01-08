@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
+using Microsoft.EntityFrameworkCore;
+using PhoneBook.Coordinators;
+using PhoneBook.Data;
 
 
 namespace PhoneBook;
@@ -17,9 +19,17 @@ internal class Program
         var services = new ServiceCollection();
 
         // Register the services
-        services.
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+        services.AddSingleton<AppCoordinator>();
 
+        // Build Service provider
+        var serviceProvider = services.BuildServiceProvider();
+
+        // Resolve AppCoordinator and start app
+        var appCoordinator = serviceProvider.GetRequiredService<AppCoordinator>();
+        appCoordinator.Start();
     }
 }
 
