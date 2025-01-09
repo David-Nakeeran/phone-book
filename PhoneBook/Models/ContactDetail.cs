@@ -2,10 +2,10 @@
 
 namespace PhoneBook.Models;
 
-class ContactDetail
+public class ContactDetail
 {
-    int Id { get; set; }
-    string? Name { get; set; }
-    string? Email { get; set; }
-    string? PhoneNumber { get; set; }
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
 }
