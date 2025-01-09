@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using PhoneBook.Coordinators;
@@ -12,23 +13,22 @@ internal class Program
     {
         // Loads settings from JSON file and builds configuration object
         var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .Build();
 
-        // Create service collection
-        var services = new ServiceCollection();
+        var host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices(services =>
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-        // Register the services
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                services.AddSingleton<AppCoordinator>();
+            })
+            .Build();
 
-        services.AddSingleton<AppCoordinator>();
-
-        // Build Service provider
-        var serviceProvider = services.BuildServiceProvider();
-
-        // Resolve AppCoordinator and start app
-        var appCoordinator = serviceProvider.GetRequiredService<AppCoordinator>();
+        using var scope = host.Services.CreateScope();
+        var appCoordinator = scope.ServiceProvider.GetRequiredService<AppCoordinator>();
         appCoordinator.Start();
     }
 }
