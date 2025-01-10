@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using PhoneBook.Coordinators;
 using PhoneBook.Data;
 
-
 namespace PhoneBook;
 internal class Program
 {
@@ -17,17 +16,17 @@ internal class Program
             .AddJsonFile("appsettings.json")
             .Build();
 
-        var host = Host.CreateDefaultBuilder(args)
-            .ConfigureServices(services =>
-            {
-                services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        // Register services
+        var builder = Host.CreateApplicationBuilder(args);
+        builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddSingleton<AppCoordinator>();
 
-                services.AddSingleton<AppCoordinator>();
-            })
-            .Build();
+        // Build app from services
+        var app = builder.Build();
 
-        using var scope = host.Services.CreateScope();
+        // Create a scope for DI management
+        using var scope = app.Services.CreateScope();
         var appCoordinator = scope.ServiceProvider.GetRequiredService<AppCoordinator>();
         appCoordinator.Start();
     }
