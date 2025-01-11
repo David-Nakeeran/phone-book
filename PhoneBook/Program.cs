@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using PhoneBook.Coordinators;
 using PhoneBook.Data;
+using PhoneBook.Views;
+using PhoneBook.Enums;
 
 namespace PhoneBook;
 internal class Program
@@ -20,6 +22,7 @@ internal class Program
         var builder = Host.CreateApplicationBuilder(args);
         builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddSingleton<MenuHandler>();
         builder.Services.AddSingleton<AppCoordinator>();
 
         // Build app from services
