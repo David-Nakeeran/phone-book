@@ -24,10 +24,18 @@ class Validation
         return input.All(Char.IsLetter);
     }
 
-    internal string? ValidateString(string message, string? input)
+    internal string? ValidateString(string message, string invalidMessage, string? input)
     {
         input = CheckInputNullOrWhitespace(message, input);
         if (IsCharZero(input)) return input;
-
+        while (!IsCharValid(input))
+        {
+            AnsiConsole.WriteLine(invalidMessage);
+            Console.ReadKey(true);
+            input = AnsiConsole.Ask<string>(message);
+            input = CheckInputNullOrWhitespace(message, input);
+            if (IsCharZero(input)) return input;
+        }
+        return input;
     }
 }
