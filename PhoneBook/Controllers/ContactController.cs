@@ -16,7 +16,20 @@ class ContactController
     internal string? GetContactName()
     {
         var contactName = AnsiConsole.Ask<string>("Please enter name of contact or enter 0 to return to main menu");
-        contactName = _validation.CheckInputNullOrWhitespace(string message, string ? input)
-        // then return string
+        contactName = _validation.ValidateString(
+            "Please enter name of contact or enter 0 to return to main menu",
+            "Invalid entry, please make sure to use only letters, press any key to continue...",
+            contactName);
+        return contactName;
+    }
+
+    internal string? GetContactEmail()
+    {
+        var emailAddress = AnsiConsole.Ask<string>("Please email address in format of 'example@example.com' or enter 0 to return to main menu");
+        emailAddress = _validation.ValidateEmailAddress(
+            "Please email address in format of 'example@example.com' or enter 0 to return to main menu",
+            "Invalid email address, please enter in correct format: 'example@example.com'",
+            emailAddress);
+        return emailAddress;
     }
 }
