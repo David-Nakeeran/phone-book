@@ -2,11 +2,13 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PhoneBook.Coordinators;
 using PhoneBook.Data;
 using PhoneBook.Views;
 using PhoneBook.Enums;
 using PhoneBook.Controllers;
+using PhoneBook.Utilities;
 
 namespace PhoneBook;
 internal class Program
@@ -21,9 +23,16 @@ internal class Program
 
         // Register services
         var builder = Host.CreateApplicationBuilder(args);
+
+        builder.Logging
+            .ClearProviders()
+            .AddDebug();
+
         builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddLogging();
         builder.Services.AddSingleton<MenuHandler>();
+        builder.Services.AddSingleton<Validation>();
         builder.Services.AddSingleton<ContactController>();
         builder.Services.AddSingleton<AppCoordinator>();
 
@@ -32,6 +41,7 @@ internal class Program
 
         // Create a scope for DI management
         using var scope = app.Services.CreateScope();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<AppCoordinator>>();
         var appCoordinator = scope.ServiceProvider.GetRequiredService<AppCoordinator>();
         appCoordinator.Start();
     }
