@@ -1,3 +1,4 @@
+using PhoneBook.Controllers;
 using PhoneBook.Enums;
 using PhoneBook.Views;
 
@@ -6,10 +7,12 @@ namespace PhoneBook.Coordinators;
 class AppCoordinator
 {
     private readonly MenuHandler _menuHandler;
+    private readonly ContactController _contactController;
 
-    public AppCoordinator(MenuHandler menuHandler)
+    public AppCoordinator(MenuHandler menuHandler, ContactController contactController)
     {
         _menuHandler = menuHandler;
+        _contactController = contactController;
     }
     internal void Start()
     {
@@ -24,7 +27,7 @@ class AppCoordinator
                     Console.WriteLine("View all records");
                     break;
                 case MenuOptions.InsertRecord:
-                    Console.WriteLine("Insert Record");
+                    AddContact();
                     break;
                 case MenuOptions.UpdateRecord:
                     Console.WriteLine("Update Record");
@@ -38,5 +41,14 @@ class AppCoordinator
                     break;
             }
         }
+    }
+
+    internal void AddContact()
+    {
+        var contactName = _contactController.GetContactName();
+        if (contactName == "0") return;
+        var contactEmailAddress = _contactController.GetContactEmail();
+        if (contactName == "0") return;
+        Console.WriteLine(contactEmailAddress);
     }
 }
