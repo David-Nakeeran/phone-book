@@ -6,7 +6,7 @@ class MenuHandler
 {
     internal MenuOptions ShowMenu()
     {
-        Console.Clear();
+        // Console.Clear();
         AnsiConsole.MarkupLine("[bold]Main Menu[/]");
         AnsiConsole.WriteLine();
         AnsiConsole.MarkupLine("[green](Use arrow keys to navigate, then press enter)[/]");
