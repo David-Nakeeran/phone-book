@@ -29,7 +29,7 @@ class Validation
 
     internal bool IsCharValid(string input)
     {
-        return input.All(Char.IsLetter);
+        return input.All(c => Char.IsLetter(c) || c == ' ');
     }
 
     internal string? ValidateString(string message, string invalidMessage, string? input)
@@ -76,5 +76,65 @@ class Validation
             if (IsCharZero(emailAddress)) return emailAddress;
         }
         return emailAddress;
+    }
+
+    internal int CheckStringLength(string input)
+    {
+        return input.Length;
+    }
+
+    internal bool IsStringValidNumbers(string input)
+    {
+        if (int.TryParse(input, out _)) return true;
+        return false;
+    }
+
+    internal string ValidateMobileNumberLength(string input)
+    {
+        int inputLength = CheckStringLength(input);
+        if (inputLength == 11) return input;
+        while (inputLength != 11)
+        {
+            if (inputLength < 11)
+            {
+                input = AnsiConsole.Ask<string>("Mobile number is too short, please try again");
+                input = CheckInputNullOrWhitespace("Please make sure to enter valid mobile number", input);
+                inputLength = CheckStringLength(input);
+            }
+            else if (inputLength > 11)
+            {
+                input = AnsiConsole.Ask<string>("Mobile number is too long, please try again");
+                input = CheckInputNullOrWhitespace("Please make sure to enter valid mobile number", input);
+                inputLength = CheckStringLength(input);
+            }
+        }
+        return input;
+    }
+
+    internal string ValidateCorrectMobilePrefixUK(string input)
+    {
+        while (!input.StartsWith("07"))
+        {
+            input = AnsiConsole.Ask<string>("Make sure mobile number enter begins with '07', please try again");
+            input = CheckInputNullOrWhitespace("Please make sure to enter valid mobile number", input);
+        }
+        return input;
+    }
+
+    internal string ValidateMobileNumber(string message, string input)
+    {
+        input = CheckInputNullOrWhitespace(message, input);
+        if (IsCharZero(input)) return input;
+
+        while (true)
+        {
+            input = ValidateMobileNumberLength(input);
+            input = ValidateCorrectMobilePrefixUK(input);
+            if (IsStringValidNumbers(input)) break;
+
+            input = AnsiConsole.Ask<string>("Please make sure to only enter numbers");
+            input = CheckInputNullOrWhitespace("Please make sure to enter valid mobile number", input);
+        }
+        return input;
     }
 }
