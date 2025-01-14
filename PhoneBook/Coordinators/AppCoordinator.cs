@@ -47,8 +47,8 @@ class AppCoordinator
     {
         var contactName = _contactController.GetContactName();
         if (contactName == "0") return;
-        var contactEmailAddress = _contactController.GetContactEmail();
-        if (contactName == "0") return;
-        Console.WriteLine(contactEmailAddress);
+        // var contactEmailAddress = _contactController.GetContactEmail();
+        // if (contactName == "0") return;
+        Console.WriteLine(contactName);
     }
 }
