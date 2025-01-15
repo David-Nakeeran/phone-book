@@ -23,4 +23,9 @@ class MenuHandler
                     ));
         return userSelection;
     }
+
+    internal void ReturnToMainMenu(string? returnToMenu)
+    {
+        if (returnToMenu == "0") return;
+    }
 }
