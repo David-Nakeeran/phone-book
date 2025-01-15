@@ -85,7 +85,7 @@ class Validation
 
     internal bool IsStringValidNumbers(string input)
     {
-        if (int.TryParse(input, out _)) return true;
+        if (long.TryParse(input, out _)) return true;
         return false;
     }
 
@@ -115,25 +115,31 @@ class Validation
     {
         while (!input.StartsWith("07"))
         {
-            input = AnsiConsole.Ask<string>("Make sure mobile number enter begins with '07', please try again");
+            input = AnsiConsole.Ask<string>("Make sure mobile number enter begins with '07', please try again or enter 0 to return to main menu");
             input = CheckInputNullOrWhitespace("Please make sure to enter valid mobile number", input);
+            if (IsCharZero(input)) return input;
         }
         return input;
     }
 
     internal string ValidateMobileNumber(string message, string input)
     {
-        input = CheckInputNullOrWhitespace(message, input);
-        if (IsCharZero(input)) return input;
-
         while (true)
         {
-            input = ValidateMobileNumberLength(input);
-            input = ValidateCorrectMobilePrefixUK(input);
-            if (IsStringValidNumbers(input)) break;
+            input = CheckInputNullOrWhitespace(message, input);
+            if (IsCharZero(input)) return input;
 
-            input = AnsiConsole.Ask<string>("Please make sure to only enter numbers");
-            input = CheckInputNullOrWhitespace("Please make sure to enter valid mobile number", input);
+            if (!IsStringValidNumbers(input))
+            {
+                input = AnsiConsole.Ask<string>("Please make sure to only enter numbers");
+                continue;
+            }
+
+            input = ValidateCorrectMobilePrefixUK(input);
+            if (IsCharZero(input)) return input;
+            input = ValidateMobileNumberLength(input);
+
+            if (IsStringValidNumbers(input)) break;
         }
         return input;
     }
