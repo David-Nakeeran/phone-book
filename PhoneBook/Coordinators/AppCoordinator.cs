@@ -1,5 +1,6 @@
 using PhoneBook.Controllers;
 using PhoneBook.Enums;
+using PhoneBook.Services;
 using PhoneBook.Views;
 
 namespace PhoneBook.Coordinators;
@@ -8,11 +9,13 @@ class AppCoordinator
 {
     private readonly MenuHandler _menuHandler;
     private readonly ContactController _contactController;
+    private readonly DatabaseManager _databaseManager;
 
-    public AppCoordinator(MenuHandler menuHandler, ContactController contactController)
+    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager)
     {
         _menuHandler = menuHandler;
         _contactController = contactController;
+        _databaseManager = databaseManager;
     }
     internal void Start()
     {
@@ -46,9 +49,12 @@ class AppCoordinator
     internal void AddContact()
     {
         var contactName = _contactController.GetContactName();
-        if (contactName == "0") return;
-        // var contactEmailAddress = _contactController.GetContactEmail();
-        // if (contactName == "0") return;
-        Console.WriteLine(contactName);
+        _menuHandler.ReturnToMainMenu(contactName);
+        var contactEmailAddress = _contactController.GetContactEmail();
+        _menuHandler.ReturnToMainMenu(contactEmailAddress);
+        var mobileNumber = _contactController.GetContactMobileNumber();
+        _menuHandler.ReturnToMainMenu(mobileNumber);
+
+        _databaseManager.CreateNewContact(contactName, contactEmailAddress, mobileNumber);
     }
 }
