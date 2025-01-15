@@ -32,4 +32,11 @@ class ContactController
             emailAddress);
         return emailAddress;
     }
+
+    internal string? GetContactMobileNumber()
+    {
+        var mobileNumber = AnsiConsole.Ask<string>("Please mobile number beginning with '07' and is 11 digits long or enter 0 to return to main menu");
+        mobileNumber = _validation.ValidateMobileNumber("Please mobile number beginning with '07' and is 11 digits long or enter 0 to return to main menu", mobileNumber);
+        return mobileNumber;
+    }
 }
