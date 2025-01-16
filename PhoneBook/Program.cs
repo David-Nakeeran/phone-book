@@ -10,6 +10,8 @@ using PhoneBook.Enums;
 using PhoneBook.Controllers;
 using PhoneBook.Utilities;
 using PhoneBook.Services;
+using PhoneBook.Mappers;
+using PhoneBook.Models;
 
 namespace PhoneBook;
 internal class Program
@@ -36,6 +38,9 @@ internal class Program
         builder.Services.AddSingleton<Validation>();
         builder.Services.AddSingleton<ContactController>();
         builder.Services.AddSingleton<DatabaseManager>();
+        builder.Services.AddSingleton<ContactMapper>();
+        builder.Services.AddSingleton<ListManager>();
+        builder.Services.AddAutoMapper(typeof(MappingProfile));
         builder.Services.AddSingleton<AppCoordinator>();
 
         // Build app from services
