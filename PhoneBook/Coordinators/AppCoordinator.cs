@@ -1,7 +1,12 @@
+using AutoMapper;
 using PhoneBook.Controllers;
 using PhoneBook.Enums;
 using PhoneBook.Services;
 using PhoneBook.Views;
+using PhoneBook.Data;
+using PhoneBook.Models;
+using PhoneBook.Mappers;
+using PhoneBook.Utilities;
 
 namespace PhoneBook.Coordinators;
 
@@ -10,12 +15,18 @@ class AppCoordinator
     private readonly MenuHandler _menuHandler;
     private readonly ContactController _contactController;
     private readonly DatabaseManager _databaseManager;
+    private readonly ContactMapper _contactMapper;
+    private readonly ListManager _listManager;
 
-    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager)
+
+    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager, ContactMapper contactMapper, ListManager listManager)
     {
         _menuHandler = menuHandler;
         _contactController = contactController;
         _databaseManager = databaseManager;
+        _contactMapper = contactMapper;
+        _listManager = listManager;
+
     }
     internal void Start()
     {
@@ -27,7 +38,7 @@ class AppCoordinator
             switch (userSelection)
             {
                 case MenuOptions.ViewAllRecords:
-                    Console.WriteLine("View all records");
+                    ViewAllContacts();
                     break;
                 case MenuOptions.InsertRecord:
                     AddContact();
@@ -56,5 +67,18 @@ class AppCoordinator
         _menuHandler.ReturnToMainMenu(mobileNumber);
 
         _databaseManager.CreateNewContact(contactName, contactEmailAddress, mobileNumber);
+    }
+
+    internal void ViewAllContacts()
+    {
+        var contactList = _databaseManager.GetContactList();
+        var contactListDTO = _contactMapper.MapContactsToDTO(contactList);
+        if (!_listManager.IsListEmpty(contactListDTO))
+        {
+            Console.WriteLine("No contacts available, returning to main menu...");
+            return;
+        }
+        _listManager.PrintContacts(contactListDTO);
+
     }
 }
