@@ -27,4 +27,16 @@ class DatabaseManager
     {
         return _applicationDbContext.ContactDetails.ToList();
     }
+
+    internal void DeleteAContact(ContactDetail contactDetail)
+    {
+
+        _applicationDbContext.Remove(contactDetail);
+        _applicationDbContext.SaveChanges();
+    }
+
+    internal ContactDetail? GetContactById(int contactId)
+    {
+        return _applicationDbContext.ContactDetails.SingleOrDefault(x => x.Id == contactId);
+    }
 }
