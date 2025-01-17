@@ -39,4 +39,11 @@ class ContactController
         mobileNumber = _validation.ValidateMobileNumber("Please mobile number beginning with '07' and is 11 digits long or enter 0 to return to main menu", mobileNumber);
         return mobileNumber;
     }
+
+    internal int GetContactId(string message)
+    {
+        var id = AnsiConsole.Ask<string>(message);
+        int contactId = _validation.ValidateContactId(message, id);
+        return contactId;
+    }
 }
