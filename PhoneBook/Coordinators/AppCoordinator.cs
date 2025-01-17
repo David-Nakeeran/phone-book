@@ -1,4 +1,4 @@
-using AutoMapper;
+using Spectre.Console;
 using PhoneBook.Controllers;
 using PhoneBook.Enums;
 using PhoneBook.Services;
@@ -75,10 +75,25 @@ class AppCoordinator
         var contactListDTO = _contactMapper.MapContactsToDTO(contactList);
         if (!_listManager.IsListEmpty(contactListDTO))
         {
-            Console.WriteLine("No contacts available, returning to main menu...");
+            AnsiConsole.WriteLine("No contacts available, returning to main menu...");
             return;
         }
         _listManager.PrintContacts(contactListDTO);
+        _menuHandler.WaitForUserInput();
+    }
 
+    internal void DeleteContact()
+    {
+        var contactId = _contactController.GetContactId("Please enter id of contact you would like to delete, or enter 0 to return to main menu");
+        var contact = _databaseManager.GetContactById(contactId);
+        if (contact != null)
+        {
+            _databaseManager.DeleteAContact(contact);
+        }
+        else
+        {
+            AnsiConsole.WriteLine("Contact not found, returning to main menu...");
+            return;
+        }
     }
 }
