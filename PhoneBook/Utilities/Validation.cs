@@ -143,4 +143,17 @@ class Validation
         }
         return input;
     }
+
+    internal int ValidateContactId(string message, string? contactId)
+    {
+        while (true)
+        {
+            contactId = CheckInputNullOrWhitespace(message, contactId);
+            if (IsStringValidNumbers(contactId))
+            {
+                return Convert.ToInt32(contactId);
+            }
+            contactId = AnsiConsole.Ask<string>(message);
+        }
+    }
 }
