@@ -28,4 +28,10 @@ class MenuHandler
     {
         if (returnToMenu == "0") return;
     }
+
+    internal void WaitForUserInput()
+    {
+        AnsiConsole.WriteLine("Press any key to continue...");
+        Console.ReadKey(true);
+    }
 }
