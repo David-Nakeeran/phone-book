@@ -37,6 +37,6 @@ class DatabaseManager
 
     internal ContactDetail? GetContactById(int contactId)
     {
-        return _applicationDbContext.ContactDetails.SingleOrDefault(x => x.Id == contactId);
+        return _applicationDbContext.ContactDetails.SingleOrDefault(x => x.Id == contactId - 1);
     }
 }
