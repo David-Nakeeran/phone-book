@@ -46,4 +46,14 @@ class ContactController
         int contactId = _validation.ValidateContactId(message, id);
         return contactId;
     }
+
+    internal List<string> GetContactUpdateFields()
+    {
+        var fields = AnsiConsole.Prompt(
+            new MultiSelectionPrompt<string>()
+            .Title("Select which contact fields you wish to update")
+            .AddChoices(new[] { "Name", "Email", "PhoneNumber" })
+        );
+        return fields;
+    }
 }
