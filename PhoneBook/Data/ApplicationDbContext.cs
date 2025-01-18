@@ -11,6 +11,13 @@ class ApplicationDbContext : DbContext
     {
 
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ContactDetail>()
+            .HasIndex(c => c.PhoneNumber)
+            .IsUnique();
+    }
     // ApplicationDbContext is used by Entity Framework Core to interact with the database.
     // A DbSet property representing the ContactDetails table in the database.
     // Entity Framework will use this property to query and save instances of ContactDetail.
