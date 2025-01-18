@@ -37,11 +37,11 @@ internal class Program
         builder.Services.AddSingleton<MenuHandler>();
         builder.Services.AddSingleton<Validation>();
         builder.Services.AddSingleton<ContactController>();
-        builder.Services.AddSingleton<DatabaseManager>();
+        builder.Services.AddScoped<DatabaseManager>();
         builder.Services.AddSingleton<ContactMapper>();
         builder.Services.AddSingleton<ListManager>();
         builder.Services.AddAutoMapper(typeof(MappingProfile));
-        builder.Services.AddSingleton<AppCoordinator>();
+        builder.Services.AddScoped<AppCoordinator>();
 
         // Build app from services
         var app = builder.Build();
