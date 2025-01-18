@@ -44,13 +44,12 @@ class AppCoordinator
                     AddContact();
                     break;
                 case MenuOptions.UpdateRecord:
-                    Console.WriteLine("Update Record");
+                    UpdateContact();
                     break;
                 case MenuOptions.DeleteRecord:
-                    Console.WriteLine("Delete record");
+                    DeleteContact();
                     break;
                 case MenuOptions.Quit:
-                    Console.WriteLine("Quit app");
                     isAppActive = false;
                     break;
             }
@@ -84,7 +83,9 @@ class AppCoordinator
 
     internal void DeleteContact()
     {
+        ViewAllContacts();
         var contactId = _contactController.GetContactId("Please enter id of contact you would like to delete, or enter 0 to return to main menu");
+        _menuHandler.ReturnToMainMenu(contactId.ToString());
         var contact = _databaseManager.GetContactById(contactId);
         if (contact != null)
         {
@@ -95,5 +96,16 @@ class AppCoordinator
             AnsiConsole.WriteLine("Contact not found, returning to main menu...");
             return;
         }
+    }
+
+    internal void UpdateContact()
+    {
+        ViewAllContacts();
+        var contactId = _contactController.GetContactId("Please enter id of contact you would like to update, or enter 0 to return to main menu");
+        _menuHandler.ReturnToMainMenu(contactId.ToString());
+        var contact = _databaseManager.GetContactById(contactId);
+        Console.WriteLine(contact);
+
+        _contactController.GetContactUpdateFields();
     }
 }
