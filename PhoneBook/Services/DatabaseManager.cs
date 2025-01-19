@@ -35,8 +35,14 @@ class DatabaseManager
         _applicationDbContext.SaveChanges();
     }
 
-    internal ContactDetail? GetContactById(int contactId)
+    internal ContactDetail? GetContactByPhoneNumber(string phoneNumber)
     {
-        return _applicationDbContext.ContactDetails.SingleOrDefault(x => x.Id == contactId - 1);
+        return _applicationDbContext.ContactDetails.SingleOrDefault(x => x.PhoneNumber == phoneNumber);
+    }
+
+    internal void UpdateContact(ContactDetail contact)
+    {
+        _applicationDbContext.ContactDetails.Update(contact);
+        _applicationDbContext.SaveChanges();
     }
 }
