@@ -40,6 +40,7 @@ internal class Program
         builder.Services.AddScoped<DatabaseManager>();
         builder.Services.AddSingleton<ContactMapper>();
         builder.Services.AddSingleton<ListManager>();
+        builder.Services.AddSingleton<ContactDetailDTO>();
         builder.Services.AddAutoMapper(typeof(MappingProfile));
         builder.Services.AddScoped<AppCoordinator>();
 
