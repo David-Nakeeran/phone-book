@@ -32,5 +32,32 @@ class ListManager
         AnsiConsole.Write(table);
     }
 
+    internal void PrintAContact(ContactDetail obj)
+    {
+        var table = new Table();
 
+        table.Title($"Contacts");
+        table.AddColumn("Name");
+        table.AddColumn("Email");
+        table.AddColumn("Mobile Number");
+
+        table.AddRow(
+        obj.Name.ToString(),
+        obj.Email.ToString(),
+        obj.PhoneNumber.ToString()
+        );
+        AnsiConsole.Write(table);
+    }
+
+    internal string? FindMatchingContactPhoneNumber(List<ContactDetailDTO> contacts, int contactId)
+    {
+        foreach (var contact in contacts)
+        {
+            if (contact.DisplayId == contactId)
+            {
+                return contact.PhoneNumber;
+            }
+        }
+        return string.Empty;
+    }
 }
