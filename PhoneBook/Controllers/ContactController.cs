@@ -52,7 +52,7 @@ class ContactController
         var fields = AnsiConsole.Prompt(
             new MultiSelectionPrompt<string>()
             .Title("Select which contact fields you wish to update")
-            .AddChoices(new[] { "Name", "Email", "PhoneNumber" })
+            .AddChoices(new[] { "Name", "Email", "Mobile Number" })
         );
         return fields;
     }
