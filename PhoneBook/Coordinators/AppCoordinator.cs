@@ -17,15 +17,17 @@ class AppCoordinator
     private readonly DatabaseManager _databaseManager;
     private readonly ContactMapper _contactMapper;
     private readonly ListManager _listManager;
+    private readonly ContactDetailDTO _contactDetailDTO;
 
 
-    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager, ContactMapper contactMapper, ListManager listManager)
+    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager, ContactMapper contactMapper, ListManager listManager, ContactDetailDTO contactDetailDTO)
     {
         _menuHandler = menuHandler;
         _contactController = contactController;
         _databaseManager = databaseManager;
         _contactMapper = contactMapper;
         _listManager = listManager;
+        _contactDetailDTO = contactDetailDTO;
 
     }
     internal void Start()
@@ -68,15 +70,21 @@ class AppCoordinator
         _databaseManager.CreateNewContact(contactName, contactEmailAddress, mobileNumber);
     }
 
-    internal void ViewAllContacts()
+    internal List<ContactDetailDTO> GetAllContacts()
     {
         var contactList = _databaseManager.GetContactList();
         var contactListDTO = _contactMapper.MapContactsToDTO(contactList);
         if (!_listManager.IsListEmpty(contactListDTO))
         {
             AnsiConsole.WriteLine("No contacts available, returning to main menu...");
-            return;
+            return new List<ContactDetailDTO>();
         }
+        return contactListDTO;
+    }
+
+    internal void ViewAllContacts()
+    {
+        var contactListDTO = GetAllContacts();
         _listManager.PrintContacts(contactListDTO);
         _menuHandler.WaitForUserInput();
     }
@@ -86,7 +94,9 @@ class AppCoordinator
         ViewAllContacts();
         var contactId = _contactController.GetContactId("Please enter id of contact you would like to delete, or enter 0 to return to main menu");
         _menuHandler.ReturnToMainMenu(contactId.ToString());
-        var contact = _databaseManager.GetContactById(contactId);
+        var contactList = GetAllContacts();
+        var contactPhoneNumber = _listManager.FindMatchingContactPhoneNumber(contactList, contactId);
+        var contact = _databaseManager.GetContactByPhoneNumber(contactPhoneNumber);
         if (contact != null)
         {
             _databaseManager.DeleteAContact(contact);
@@ -103,9 +113,43 @@ class AppCoordinator
         ViewAllContacts();
         var contactId = _contactController.GetContactId("Please enter id of contact you would like to update, or enter 0 to return to main menu");
         _menuHandler.ReturnToMainMenu(contactId.ToString());
-        var contact = _databaseManager.GetContactById(contactId);
-        Console.WriteLine(contact);
+        var contactList = GetAllContacts();
+        var contactPhoneNumber = _listManager.FindMatchingContactPhoneNumber(contactList, contactId);
 
-        _contactController.GetContactUpdateFields();
+        var contact = _databaseManager.GetContactByPhoneNumber(contactPhoneNumber);
+        _listManager.PrintAContact(contact);
+
+        var fieldsToBeUpdated = _contactController.GetContactUpdateFields();
+        string? contactName = "";
+        string? contactEmail = "";
+        string? contactNumber = "";
+        foreach (var field in fieldsToBeUpdated)
+        {
+            switch (field)
+            {
+                case "Name":
+                    contactName = _contactController.GetContactName();
+                    break;
+                case "Email":
+                    contactEmail = _contactController.GetContactEmail();
+                    break;
+                case "Mobile Number":
+                    contactNumber = _contactController.GetContactMobileNumber();
+                    break;
+            }
+        }
+        if (!string.IsNullOrEmpty(contactName))
+        {
+            contact.Name = contactName;
+        }
+        if (!string.IsNullOrEmpty(contactEmail))
+        {
+            contact.Email = contactEmail;
+        }
+        if (!string.IsNullOrEmpty(contactNumber))
+        {
+            contact.PhoneNumber = contactNumber;
+        }
+        _databaseManager.UpdateContact(contact);
     }
 }
