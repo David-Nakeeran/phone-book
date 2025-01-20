@@ -108,48 +108,52 @@ class AppCoordinator
         }
     }
 
+    internal ContactDetail? GetContactToBeUpdated(int contactId)
+    {
+        var contactList = GetAllContacts();
+        var contactPhoneNumber = _listManager.FindMatchingContactPhoneNumber(contactList, contactId);
+        if (contactPhoneNumber == null)
+        {
+            AnsiConsole.WriteLine("No matching Id found, returning to main menu");
+            return null;
+        }
+        return _databaseManager.GetContactByPhoneNumber(contactPhoneNumber);
+    }
+
+    internal void UpdateContactFields(ContactDetail contact, List<string> fields)
+    {
+        foreach (var field in fields)
+        {
+            switch (field)
+            {
+                case "Name":
+                    contact.Name = _contactController.GetContactName();
+                    break;
+                case "Email":
+                    contact.Email = _contactController.GetContactEmail();
+                    break;
+                case "Mobile Number":
+                    contact.PhoneNumber = _contactController.GetContactMobileNumber();
+                    break;
+            }
+        }
+        _databaseManager.UpdateContact(contact);
+    }
+
     internal void UpdateContact()
     {
         ViewAllContacts();
         var contactId = _contactController.GetContactId("Please enter id of contact you would like to update, or enter 0 to return to main menu");
         _menuHandler.ReturnToMainMenu(contactId.ToString());
-        var contactList = GetAllContacts();
-        var contactPhoneNumber = _listManager.FindMatchingContactPhoneNumber(contactList, contactId);
 
-        var contact = _databaseManager.GetContactByPhoneNumber(contactPhoneNumber);
-        _listManager.PrintAContact(contact);
+        var contact = GetContactToBeUpdated(contactId);
+        if (contact != null)
+        {
+            _listManager.PrintAContact(contact);
 
-        var fieldsToBeUpdated = _contactController.GetContactUpdateFields();
-        string? contactName = "";
-        string? contactEmail = "";
-        string? contactNumber = "";
-        foreach (var field in fieldsToBeUpdated)
-        {
-            switch (field)
-            {
-                case "Name":
-                    contactName = _contactController.GetContactName();
-                    break;
-                case "Email":
-                    contactEmail = _contactController.GetContactEmail();
-                    break;
-                case "Mobile Number":
-                    contactNumber = _contactController.GetContactMobileNumber();
-                    break;
-            }
+            var fieldsToBeUpdated = _contactController.GetContactUpdateFields();
+            UpdateContactFields(contact, fieldsToBeUpdated);
         }
-        if (!string.IsNullOrEmpty(contactName))
-        {
-            contact.Name = contactName;
-        }
-        if (!string.IsNullOrEmpty(contactEmail))
-        {
-            contact.Email = contactEmail;
-        }
-        if (!string.IsNullOrEmpty(contactNumber))
-        {
-            contact.PhoneNumber = contactNumber;
-        }
-        _databaseManager.UpdateContact(contact);
+        return;
     }
 }
