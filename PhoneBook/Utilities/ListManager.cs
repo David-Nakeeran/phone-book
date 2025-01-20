@@ -58,6 +58,6 @@ class ListManager
                 return contact.PhoneNumber;
             }
         }
-        return string.Empty;
+        return null;
     }
 }
