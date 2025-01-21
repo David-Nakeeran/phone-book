@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using PhoneBook.Coordinators;
 using PhoneBook.Data;
 using PhoneBook.Views;
-using PhoneBook.Enums;
 using PhoneBook.Controllers;
 using PhoneBook.Utilities;
 using PhoneBook.Services;
@@ -33,6 +32,7 @@ internal class Program
 
         builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
         builder.Services.AddLogging();
         builder.Services.AddSingleton<MenuHandler>();
         builder.Services.AddSingleton<Validation>();
@@ -41,6 +41,7 @@ internal class Program
         builder.Services.AddSingleton<ContactMapper>();
         builder.Services.AddSingleton<ListManager>();
         builder.Services.AddSingleton<ContactDetailDTO>();
+        builder.Services.AddScoped<MailService>();
         builder.Services.AddAutoMapper(typeof(MappingProfile));
         builder.Services.AddScoped<AppCoordinator>();
 
