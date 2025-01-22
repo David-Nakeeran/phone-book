@@ -6,5 +6,6 @@ internal enum MenuOptions
     InsertRecord,
     UpdateRecord,
     DeleteRecord,
+    SendEmail,
     Quit
 }
