@@ -19,6 +19,7 @@ class MenuHandler
                     MenuOptions.InsertRecord,
                     MenuOptions.UpdateRecord,
                     MenuOptions.DeleteRecord,
+                    MenuOptions.SendEmail,
                     MenuOptions.Quit
                     ));
         return userSelection;
