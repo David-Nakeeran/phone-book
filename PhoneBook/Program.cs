@@ -37,9 +37,11 @@ internal class Program
         builder.Services.AddSingleton<MenuHandler>();
         builder.Services.AddSingleton<Validation>();
         builder.Services.AddSingleton<ContactController>();
+        builder.Services.AddSingleton<EmailController>();
         builder.Services.AddScoped<DatabaseManager>();
         builder.Services.AddSingleton<ContactMapper>();
         builder.Services.AddSingleton<ListManager>();
+        builder.Services.AddSingleton<MailService>();
         builder.Services.AddSingleton<ContactDetailDTO>();
         builder.Services.AddScoped<MailService>();
         builder.Services.AddAutoMapper(typeof(MappingProfile));
