@@ -3,7 +3,6 @@ using PhoneBook.Controllers;
 using PhoneBook.Enums;
 using PhoneBook.Services;
 using PhoneBook.Views;
-using PhoneBook.Data;
 using PhoneBook.Models;
 using PhoneBook.Mappers;
 using PhoneBook.Utilities;
@@ -18,9 +17,11 @@ class AppCoordinator
     private readonly ContactMapper _contactMapper;
     private readonly ListManager _listManager;
     private readonly ContactDetailDTO _contactDetailDTO;
+    private readonly EmailController _emailController;
+    private readonly MailService _mailService;
 
 
-    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager, ContactMapper contactMapper, ListManager listManager, ContactDetailDTO contactDetailDTO)
+    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager, ContactMapper contactMapper, ListManager listManager, ContactDetailDTO contactDetailDTO, EmailController emailController, MailService mailService)
     {
         _menuHandler = menuHandler;
         _contactController = contactController;
@@ -28,6 +29,8 @@ class AppCoordinator
         _contactMapper = contactMapper;
         _listManager = listManager;
         _contactDetailDTO = contactDetailDTO;
+        _emailController = emailController;
+        _mailService = mailService;
 
     }
     internal void Start()
@@ -50,6 +53,9 @@ class AppCoordinator
                     break;
                 case MenuOptions.DeleteRecord:
                     DeleteContact();
+                    break;
+                case MenuOptions.SendEmail:
+                    SendEmail();
                     break;
                 case MenuOptions.Quit:
                     isAppActive = false;
@@ -108,7 +114,7 @@ class AppCoordinator
         }
     }
 
-    internal ContactDetail? GetContactToBeUpdated(int contactId)
+    internal ContactDetail? GetContactObject(int contactId)
     {
         var contactList = GetAllContacts();
         var contactPhoneNumber = _listManager.FindMatchingContactPhoneNumber(contactList, contactId);
@@ -146,7 +152,7 @@ class AppCoordinator
         var contactId = _contactController.GetContactId("Please enter id of contact you would like to update, or enter 0 to return to main menu");
         _menuHandler.ReturnToMainMenu(contactId.ToString());
 
-        var contact = GetContactToBeUpdated(contactId);
+        var contact = GetContactObject(contactId);
         if (contact != null)
         {
             _listManager.PrintAContact(contact);
@@ -155,5 +161,33 @@ class AppCoordinator
             UpdateContactFields(contact, fieldsToBeUpdated);
         }
         return;
+    }
+
+    internal void SendEmail()
+    {
+        ViewAllContacts();
+        var contactId = _contactController.GetContactId("Please enter id of contact you would like to send an email to, or enter 0 to return to main menu");
+        _menuHandler.ReturnToMainMenu(contactId.ToString());
+        var contact = GetContactObject(contactId);
+
+        if (contact != null)
+        {
+            var emailSubject = _emailController.GetEmailSubject();
+            var emailBody = _emailController.GetEmailBody();
+
+            var email = new EmailDetail
+            {
+                RecipientName = contact.Name,
+                RecipientEmail = contact.Email,
+                Subject = emailSubject,
+                Body = emailBody
+            };
+            _mailService.SendMail(email);
+            AnsiConsole.WriteLine("email have been sent");
+            return;
+        }
+        AnsiConsole.WriteLine("Email could not be sent, returning to main menu");
+        return;
+
     }
 }
