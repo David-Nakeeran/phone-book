@@ -1,5 +1,4 @@
 using MailKit.Net.Smtp;
-using MailKit;
 using MimeKit;
 using PhoneBook.Models;
 using Microsoft.Extensions.Options;
