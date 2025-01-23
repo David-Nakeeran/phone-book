@@ -17,10 +17,14 @@ internal class Program
 {
     static void Main(string[] args)
     {
+        Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", "Development");
+
         // Loads settings from JSON file and builds configuration object
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
+            .AddUserSecrets<Program>()
+            .AddEnvironmentVariables()
             .Build();
 
         // Register services
@@ -54,6 +58,7 @@ internal class Program
         using var scope = app.Services.CreateScope();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<AppCoordinator>>();
         var appCoordinator = scope.ServiceProvider.GetRequiredService<AppCoordinator>();
+
         appCoordinator.Start();
     }
 }
