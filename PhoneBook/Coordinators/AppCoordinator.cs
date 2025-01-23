@@ -6,6 +6,7 @@ using PhoneBook.Views;
 using PhoneBook.Models;
 using PhoneBook.Mappers;
 using PhoneBook.Utilities;
+using System.Threading.Tasks;
 
 namespace PhoneBook.Coordinators;
 
@@ -55,7 +56,7 @@ class AppCoordinator
                     DeleteContact();
                     break;
                 case MenuOptions.SendEmail:
-                    SendEmail();
+                    // SendEmail();
                     break;
                 case MenuOptions.Quit:
                     isAppActive = false;
@@ -188,6 +189,5 @@ class AppCoordinator
         }
         AnsiConsole.WriteLine("Email could not be sent, returning to main menu");
         return;
-
     }
 }
