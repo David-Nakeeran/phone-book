@@ -12,7 +12,7 @@ class DatabaseManager
         _applicationDbContext = applicationDbContext;
     }
 
-    internal void CreateNewContact(string? name, string? email, string? phoneNumber)
+    internal void CreateNewContact(string name, string email, string phoneNumber)
     {
         _applicationDbContext.Add(new ContactDetail
         {
