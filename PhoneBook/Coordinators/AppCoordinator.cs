@@ -56,7 +56,7 @@ class AppCoordinator
                     DeleteContact();
                     break;
                 case MenuOptions.SendEmail:
-                    // SendEmail();
+                    SendEmail();
                     break;
                 case MenuOptions.Quit:
                     isAppActive = false;
