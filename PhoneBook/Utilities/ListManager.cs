@@ -17,6 +17,7 @@ class ListManager
         table.AddColumn("Name");
         table.AddColumn("Email");
         table.AddColumn("Mobile Number");
+        table.AddColumn("Category");
 
         foreach (var contact in list)
         {
@@ -25,7 +26,8 @@ class ListManager
             contact.DisplayId.ToString(),
             contact.Name.ToString(),
             contact.Email.ToString(),
-            contact.PhoneNumber.ToString()
+            contact.PhoneNumber.ToString(),
+            contact.CategoryName.ToString()
             );
         }
 
@@ -40,11 +42,13 @@ class ListManager
         table.AddColumn("Name");
         table.AddColumn("Email");
         table.AddColumn("Mobile Number");
+        table.AddColumn("Category");
 
         table.AddRow(
         obj.Name.ToString(),
         obj.Email.ToString(),
-        obj.PhoneNumber.ToString()
+        obj.PhoneNumber.ToString(),
+        obj.Category.CategoryName.ToString()
         );
         AnsiConsole.Write(table);
     }
