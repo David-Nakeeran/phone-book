@@ -11,6 +11,6 @@ public class Category
     [Required]
     public required string CategoryName { get; set; }
 
-    public List<ContactDetail>? Contacts { get; set; }
+    public List<ContactDetail> Contacts { get; set; } = new List<ContactDetail>();
     // navigation property is a collection of all ContactDetail records that have the matching CategoryId
 }
