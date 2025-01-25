@@ -6,7 +6,6 @@ using PhoneBook.Views;
 using PhoneBook.Models;
 using PhoneBook.Mappers;
 using PhoneBook.Utilities;
-using System.Threading.Tasks;
 
 namespace PhoneBook.Coordinators;
 
@@ -20,9 +19,10 @@ class AppCoordinator
     private readonly ContactDetailDTO _contactDetailDTO;
     private readonly EmailController _emailController;
     private readonly MailService _mailService;
+    private readonly CategoryController _categoryController;
 
 
-    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager, ContactMapper contactMapper, ListManager listManager, ContactDetailDTO contactDetailDTO, EmailController emailController, MailService mailService)
+    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager, ContactMapper contactMapper, ListManager listManager, ContactDetailDTO contactDetailDTO, EmailController emailController, MailService mailService, CategoryController categoryController)
     {
         _menuHandler = menuHandler;
         _contactController = contactController;
@@ -32,6 +32,7 @@ class AppCoordinator
         _contactDetailDTO = contactDetailDTO;
         _emailController = emailController;
         _mailService = mailService;
+        _categoryController = categoryController;
 
     }
     internal void Start()
@@ -74,7 +75,11 @@ class AppCoordinator
         var mobileNumber = _contactController.GetContactMobileNumber();
         _menuHandler.ReturnToMainMenu(mobileNumber);
 
-        _databaseManager.CreateNewContact(contactName, contactEmailAddress, mobileNumber);
+        var categoryList = _databaseManager.GetCategoryList();
+        var selectedCategory = _categoryController.GetCategory(categoryList);
+        var categoryId = categoryList.First(c => c.CategoryName == selectedCategory).CategoryId;
+
+        _databaseManager.CreateNewContact(contactName, contactEmailAddress, mobileNumber, categoryId);
     }
 
     internal List<ContactDetailDTO> GetAllContacts()
