@@ -47,6 +47,7 @@ internal class Program
         builder.Services.AddSingleton<ListManager>();
         builder.Services.AddSingleton<MailService>();
         builder.Services.AddSingleton<ContactDetailDTO>();
+        builder.Services.AddSingleton<CategoryController>();
         builder.Services.AddScoped<MailService>();
         builder.Services.AddAutoMapper(typeof(MappingProfile));
         builder.Services.AddScoped<AppCoordinator>();
