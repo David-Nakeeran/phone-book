@@ -18,6 +18,7 @@ class ContactMapper
         {
             var dto = _mapper.Map<ContactDetailDTO>(contact);
             dto.DisplayId = index + 1;
+            dto.CategoryName = contact.Category.CategoryName;
             return dto;
         }).ToList();
         return contactDetailDTOs;
