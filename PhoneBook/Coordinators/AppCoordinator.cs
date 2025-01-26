@@ -68,12 +68,12 @@ class AppCoordinator
 
     internal void AddContact()
     {
-        var contactName = _contactController.GetContactName();
-        _menuHandler.ReturnToMainMenu(contactName);
-        var contactEmailAddress = _contactController.GetContactEmail();
-        _menuHandler.ReturnToMainMenu(contactEmailAddress);
-        var mobileNumber = _contactController.GetContactMobileNumber();
-        _menuHandler.ReturnToMainMenu(mobileNumber);
+        var contactName = _contactController.GetContactName("Please enter name of contact or enter 0 to return to main menu");
+        if (_menuHandler.ReturnToMainMenu(contactName)) return;
+        var contactEmailAddress = _contactController.GetContactEmail("Please email address in format of 'example@example.com' or enter 0 to return to main menu");
+        if (_menuHandler.ReturnToMainMenu(contactEmailAddress)) return;
+        var mobileNumber = _contactController.GetContactMobileNumber("Please mobile number beginning with '07' and is 11 digits long or enter 0 to return to main menu");
+        if (_menuHandler.ReturnToMainMenu(mobileNumber)) return;
 
         var categoryList = _databaseManager.GetCategoryList();
         var selectedCategory = _categoryController.GetCategory(categoryList);
@@ -105,7 +105,7 @@ class AppCoordinator
     {
         ViewAllContacts();
         var contactId = _contactController.GetContactId("Please enter id of contact you would like to delete, or enter 0 to return to main menu");
-        _menuHandler.ReturnToMainMenu(contactId.ToString());
+        if (_menuHandler.ReturnToMainMenu(contactId.ToString())) return;
         var contactList = GetAllContacts();
         var contactPhoneNumber = _listManager.FindMatchingContactPhoneNumber(contactList, contactId);
         var contact = _databaseManager.GetContactByPhoneNumber(contactPhoneNumber);
@@ -139,13 +139,19 @@ class AppCoordinator
             switch (field)
             {
                 case "Name":
-                    contact.Name = _contactController.GetContactName();
+                    contact.Name = _contactController.GetContactName("Please update name of contact");
                     break;
                 case "Email":
-                    contact.Email = _contactController.GetContactEmail();
+                    contact.Email = _contactController.GetContactEmail("Please update email in format of 'example@example.com'");
                     break;
                 case "Mobile Number":
-                    contact.PhoneNumber = _contactController.GetContactMobileNumber();
+                    contact.PhoneNumber = _contactController.GetContactMobileNumber("Please update mobile number beginning with '07' and is 11 digits long");
+                    break;
+                case "Category":
+                    var categoryList = _databaseManager.GetCategoryList();
+                    var selectedCategory = _categoryController.GetCategory(categoryList);
+                    var newCategory = categoryList.First(c => c.CategoryName == selectedCategory);
+                    contact.Category = newCategory;
                     break;
             }
         }
@@ -156,7 +162,7 @@ class AppCoordinator
     {
         ViewAllContacts();
         var contactId = _contactController.GetContactId("Please enter id of contact you would like to update, or enter 0 to return to main menu");
-        _menuHandler.ReturnToMainMenu(contactId.ToString());
+        if (_menuHandler.ReturnToMainMenu(contactId.ToString())) return;
 
         var contact = GetContactObject(contactId);
         if (contact != null)
@@ -173,7 +179,7 @@ class AppCoordinator
     {
         ViewAllContacts();
         var contactId = _contactController.GetContactId("Please enter id of contact you would like to send an email to, or enter 0 to return to main menu");
-        _menuHandler.ReturnToMainMenu(contactId.ToString());
+        if (_menuHandler.ReturnToMainMenu(contactId.ToString())) return;
         var contact = GetContactObject(contactId);
 
         if (contact != null)
