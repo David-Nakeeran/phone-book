@@ -13,30 +13,30 @@ class ContactController
         _validation = validation;
     }
 
-    internal string? GetContactName()
+    internal string GetContactName(string message)
     {
-        var contactName = AnsiConsole.Ask<string>("Please enter name of contact or enter 0 to return to main menu");
+        var contactName = AnsiConsole.Ask<string>(message);
         contactName = _validation.ValidateString(
-            "Please enter name of contact or enter 0 to return to main menu",
-            "Invalid entry, please make sure to use only letters, press any key to continue...",
+            message,
+            "Invalid entry, please try again",
             contactName);
         return contactName;
     }
 
-    internal string? GetContactEmail()
+    internal string GetContactEmail(string message)
     {
-        var emailAddress = AnsiConsole.Ask<string>("Please email address in format of 'example@example.com' or enter 0 to return to main menu");
+        var emailAddress = AnsiConsole.Ask<string>(message);
         emailAddress = _validation.ValidateEmailAddress(
-            "Please email address in format of 'example@example.com' or enter 0 to return to main menu",
-            "Invalid email address, please enter in correct format: 'example@example.com'",
+            message,
+            "Invalid email address, please try again",
             emailAddress);
         return emailAddress;
     }
 
-    internal string? GetContactMobileNumber()
+    internal string GetContactMobileNumber(string message)
     {
-        var mobileNumber = AnsiConsole.Ask<string>("Please mobile number beginning with '07' and is 11 digits long or enter 0 to return to main menu");
-        mobileNumber = _validation.ValidateMobileNumber("Please mobile number beginning with '07' and is 11 digits long or enter 0 to return to main menu", mobileNumber);
+        var mobileNumber = AnsiConsole.Ask<string>(message);
+        mobileNumber = _validation.ValidateMobileNumber(message, mobileNumber);
         return mobileNumber;
     }
 
@@ -52,7 +52,7 @@ class ContactController
         var fields = AnsiConsole.Prompt(
             new MultiSelectionPrompt<string>()
             .Title("Select which contact fields you wish to update")
-            .AddChoices(new[] { "Name", "Email", "Mobile Number" })
+            .AddChoices(new[] { "Name", "Email", "Mobile Number", "Category" })
         );
         return fields;
     }
