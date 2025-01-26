@@ -48,7 +48,9 @@ class DatabaseManager
 
     internal ContactDetail? GetContactByPhoneNumber(string? phoneNumber)
     {
-        return _applicationDbContext.ContactDetails.SingleOrDefault(x => x.PhoneNumber == phoneNumber);
+        return _applicationDbContext.ContactDetails
+            .Include(c => c.Category)
+            .SingleOrDefault(x => x.PhoneNumber == phoneNumber);
     }
 
     internal void UpdateContact(ContactDetail contact)
