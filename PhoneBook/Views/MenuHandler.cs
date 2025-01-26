@@ -25,9 +25,10 @@ class MenuHandler
         return userSelection;
     }
 
-    internal void ReturnToMainMenu(string? returnToMenu)
+    internal bool ReturnToMainMenu(string? returnToMenu)
     {
-        if (returnToMenu == "0") return;
+        if (returnToMenu == "0") return true;
+        return false;
     }
 
     internal void WaitForUserInput()
