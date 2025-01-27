@@ -16,20 +16,18 @@ class AppCoordinator
     private readonly DatabaseManager _databaseManager;
     private readonly ContactMapper _contactMapper;
     private readonly ListManager _listManager;
-    private readonly ContactDetailDTO _contactDetailDTO;
     private readonly EmailController _emailController;
     private readonly MailService _mailService;
     private readonly CategoryController _categoryController;
 
 
-    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager, ContactMapper contactMapper, ListManager listManager, ContactDetailDTO contactDetailDTO, EmailController emailController, MailService mailService, CategoryController categoryController)
+    public AppCoordinator(MenuHandler menuHandler, ContactController contactController, DatabaseManager databaseManager, ContactMapper contactMapper, ListManager listManager, EmailController emailController, MailService mailService, CategoryController categoryController)
     {
         _menuHandler = menuHandler;
         _contactController = contactController;
         _databaseManager = databaseManager;
         _contactMapper = contactMapper;
         _listManager = listManager;
-        _contactDetailDTO = contactDetailDTO;
         _emailController = emailController;
         _mailService = mailService;
         _categoryController = categoryController;
