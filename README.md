@@ -29,6 +29,8 @@ dotnet user-secrets set "MailSettings:Password" "<your-mailtrap-password>"
 
 - These secrets will override the UserName and Password values in appsettings.json
 
+- Connection Strings: Provide your database connection details
+
 - Open a terminal or command prompt into the project directory.
 - Build the app:
   `dotnet build`

@@ -3,9 +3,6 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
-# app settings
-appsettings.json
-
 # .vscode folder
 .vscode/
 
