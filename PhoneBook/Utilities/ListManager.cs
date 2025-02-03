@@ -9,6 +9,7 @@ class ListManager
 
     internal void PrintContacts(List<ContactDetailDTO> list)
     {
+        Console.Clear();
         var table = new Table();
 
         table.Title($"Contacts");
