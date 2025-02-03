@@ -42,22 +42,22 @@ class AppCoordinator
             var userSelection = _menuHandler.ShowMenu();
             switch (userSelection)
             {
-                case MenuOptions.ViewAllRecords:
+                case "View All Records":
                     ViewAllContacts();
                     break;
-                case MenuOptions.InsertRecord:
+                case "Insert Record":
                     AddContact();
                     break;
-                case MenuOptions.UpdateRecord:
+                case "Update Record":
                     UpdateContact();
                     break;
-                case MenuOptions.DeleteRecord:
+                case "Delete Record":
                     DeleteContact();
                     break;
-                case MenuOptions.SendEmail:
+                case "Send Email":
                     SendEmail();
                     break;
-                case MenuOptions.Quit:
+                case "Quit":
                     isAppActive = false;
                     break;
             }
