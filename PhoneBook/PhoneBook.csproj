@@ -28,4 +28,10 @@
     <PackageReference Include="Twilio" Version="7.8.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
