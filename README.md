@@ -19,6 +19,16 @@ git clone https://github.com/your-username/phone-book.git
 cd phone-book
 ```
 
+- Database set up
+  Before running the application for the first time, you need to create a database and apply migrations
+
+1. Ensure SQL Server is running
+2. Apply migrations by running the step below, in project directory via terminal
+
+```
+dotnet ef database update
+```
+
 - Set up User Secrets
 
 ```
